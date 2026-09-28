@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { api } from '@appdeploy/client';
+import { api } from './api';
 import { LockKeyhole, Settings, ArrowUpRight, Download, MoreHorizontal, LogOut, X, Camera, UserRound, ShieldCheck, Search } from 'lucide-react';
 
 type WalletState = { balance: number; balanceUpdatedAt?: string; updatedAt: string };

@@ -1,27 +1,27 @@
 # PocketPay — editable source
 
-This ZIP contains the current PocketPay fictional wallet interface source snapshot.
+PocketPay is a **fictional wallet interface**. It is not connected to real financial accounts, payment networks, banks, or real funds.
 
-## Open in VS Code
+## Deployment architecture
 
-1. Extract this ZIP.
-2. Open the extracted folder in VS Code.
-3. Run `npm install`.
-4. Run `npm run dev` for the frontend development server.
+- GitHub stores the source code.
+- Vercel hosts the Vite frontend and `/api` serverless functions.
+- Neon Postgres stores fictional accounts, profiles, and balances.
 
-## Important
+The laptop does **not** need to stay on for the deployed app to work.
 
-The backend currently uses AppDeploy's `@appdeploy/sdk` for its database and storage. That means the full login/profile/balance functionality is designed to run on AppDeploy as it currently does.
+## Required Vercel environment variables
 
-For an independent free host such as Vercel/Render/Netlify, the backend needs to be migrated to a hosting-compatible database/API (for example a free PostgreSQL/Supabase-style setup). I have not replaced that backend with an external service because doing so would require service credentials and would change the current app's data model.
+- `DATABASE_URL` — provided by the Neon integration.
+- `POCKETPAY_ADMIN_USERNAME` — your private admin username.
+- `POCKETPAY_ADMIN_PASSWORD` — your private admin password.
 
-The current public AppDeploy deployment is:
-https://pocketpay-demo-d0klh6.v2.appdeploy.ai/
+Do not put these values in the Git repository.
 
-This is a fictional wallet interface. It is not connected to real financial accounts or funds.
+## Local development
 
-Admin demo credentials currently embedded in the AppDeploy backend:
-username: admin
-password: demo-1234
+1. Run `npm install`.
+2. Set the environment variables above.
+3. Run `npm run dev`.
 
-For any real deployment, change/remove those demo credentials and use proper server-side authentication and secrets.
+The database schema is created automatically the first time the API is called.
