@@ -1,0 +1,110 @@
+[
+  {
+    "name": "Show logo loading animation before authentication",
+    "sanity": true,
+    "viewport": "desktop",
+    "covers": [
+      "logo loading animation",
+      "startup splash",
+      "login screen transition"
+    ],
+    "description": "Verifies the PocketPay logo splash appears before the authentication screen.",
+    "steps": [
+      "Open the application",
+      "Observe the animated PocketPay logo",
+      "Wait for the splash to finish"
+    ],
+    "expected": "The animated PocketPay logo appears first and then the login/signup screen is shown."
+  },
+  {
+    "name": "Create an account, refresh, and remain signed in",
+    "viewport": "desktop",
+    "covers": [
+      "signup form",
+      "POST /api/signup",
+      "POST /api/login",
+      "initial balance display",
+      "browser session persistence",
+      "login after refresh"
+    ],
+    "description": "Verifies the saved fictional wallet balance is visible immediately after login and remains available after a browser refresh.",
+    "steps": [
+      "Open signup after the splash",
+      "Create a new username and password",
+      "Log in with those credentials",
+      "Confirm the Available balance is visible without opening Send or Receive",
+      "Refresh the browser"
+    ],
+    "expected": "The Available balance is visible immediately after login without requiring a wallet action, and after refresh the user returns directly to the signed-in dashboard with the balance still visible."
+  },
+  {
+    "name": "Edit and persist profile settings",
+    "viewport": "mobile",
+    "covers": [
+      "profile settings",
+      "date of birth",
+      "profile details",
+      "profile persistence",
+      "PUT /api/profile"
+    ],
+    "description": "Verifies account profile information can be entered and saved from settings.",
+    "steps": [
+      "Log in",
+      "Open profile settings",
+      "Enter full name, date of birth, email, phone, country, and bio",
+      "Save profile",
+      "Reopen profile settings"
+    ],
+    "expected": "The saved profile information is still displayed after reopening settings."
+  },
+  {
+    "name": "Admin balance changes appear in the user's account",
+    "viewport": "desktop",
+    "covers": [
+      "Admin login",
+      "POST /api/admin/login",
+      "account list",
+      "PUT /api/admin/account-balance",
+      "per-account balance persistence",
+      "automatic wallet refresh"
+    ],
+    "description": "Verifies an admin changes a saved account's fictional balance and the user's account keeps the newest saved value across automatic refreshes and a browser refresh.",
+    "setup": [
+      "Create a fictional account with username 'balance-test-user' and a password through the signup form."
+    ],
+    "steps": [
+      "Sign in to the balance-test-user account and note its balance",
+      "In a separate admin session, sign in as admin",
+      "Set balance-test-user's fictional balance to $5000.00",
+      "Return to the already-open user account",
+      "Wait for the automatic wallet refresh",
+      "Refresh the browser"
+    ],
+    "expected": "The user's Available balance updates to $5,000.00, does not revert to an older value during refresh, and remains $5,000.00 after the browser refresh."
+  },
+  {
+    "name": "Reject unauthorized balance edits",
+    "viewport": "mobile",
+    "covers": [
+      "admin authorization",
+      "balance edit permission boundary",
+      "protected endpoint"
+    ],
+    "description": "Verifies a non-admin account cannot use the protected admin balance endpoint.",
+    "qa_faults": [
+      {
+        "method": "PUT",
+        "path": "/api/admin/account-balance",
+        "status": 401,
+        "body_json": {
+          "error": "Unauthorized"
+        }
+      }
+    ],
+    "steps": [
+      "Log in as a normal fictional wallet user",
+      "Attempt to change another account's balance through the admin-only workflow"
+    ],
+    "expected": "The protected balance edit is denied and the normal user's balance is unchanged."
+  }
+]
